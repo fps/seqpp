@@ -25,7 +25,7 @@ struct consumer {
 		If the event is not successfully posted,
 		return false.
 	*/
-	bool post_event(const pair<time_type, event_type> &e, bool is_blocking = false) {
+	bool post_event(const pair<time_type, event_type> e, bool is_blocking = false) {
 		if (false == is_blocking && false == events.can_write()) {
 			return false;
 		}
@@ -41,9 +41,9 @@ struct consumer {
 		events.write(e);
 	}
 
-	void post_event(const time_type &t, const event_type &e, bool is_blocking = false) {
+	bool post_event(const time_type t, const event_type e, bool is_blocking = false) {
 		pair<time_type, event_type> p = make_pair(t, e);
-		post_event(p, is_blocking);
+		return post_event(p, is_blocking);
 	}
 };
 

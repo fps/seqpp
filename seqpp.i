@@ -1,21 +1,24 @@
-%module seqpp
+%module libseqpp
 %{
         #include "midi_event.h"
+        #include "consumer.h"
         #include "jack_midi_consumer.h"
         #include <boost/shared_ptr.hpp>
 
         using namespace seqpp;
 %}
 
+%apply unsigned long long { jack_nframes_t }
 %include "std_string.i"
-%include "std_vector.i"
+%include "std_pair.i"
 
 %include "midi_event.h"
+%include "consumer.h"
+%template (jmc) seqpp::consumer<jack_nframes_t, midi_event>;
 %include "jack_midi_consumer.h"
  
 using namespace seqpp;
 
-%apply unsigned long long { jack_nframes_t }
 
 //namespace std {
 //  %template (sequence_vector) vector<seqpp::sequence>;
@@ -23,4 +26,3 @@ using namespace seqpp;
 //}
 
 //%template (gc_sequence) seqpp::disposable<seqpp::sequence>;
-//%template (jack_midi_consumer) seqpp::consumer<jack_nframes_t, midi_event>;

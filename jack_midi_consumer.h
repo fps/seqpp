@@ -7,7 +7,7 @@
 
 namespace seqpp {
 
-struct jack_midi_consumer : consumer<jack_nframes_t, midi_event> {
+struct jack_midi_consumer : public  consumer<jack_nframes_t, midi_event> {
 
 };
 

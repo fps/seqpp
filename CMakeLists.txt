@@ -38,8 +38,8 @@ find_package(PkgConfig)
 find_package(Lua51)
 find_package(Boost COMPONENTS program_options)
 
-add_executable(test_seqpp disposable.cc  engine.cc  heap.cc  main.cc  ${PROJECT_BINARY_DIR}/seqpp_wrap.cc)
-add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc)
+add_executable(test_seqpp disposable.cc  heap.cc  main.cc  ${PROJECT_BINARY_DIR}/seqpp_wrap.cc)
+add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc disposable.cc  heap.cc) 
 
 include_directories(. ${LUA_INCLUDE_DIR})
 
