@@ -4,16 +4,19 @@
 #include <jack/jack.h>
 #include <string>
 #include <stdexcept>
+#include <iostream>
 
+using std::cout;
+using std::endl;
 using std::string;
 using std::runtime_error;
 
-extern "C" {
-	int jack_process(jack_nframes_t, void *arg);
-}
+
 
 namespace seqpp {
 
+
+template <class client_type>
 struct jack_client {
 	jack_client_t *client;
 
@@ -26,23 +29,27 @@ struct jack_client {
 			throw runtime_error("failed to open jack client");
 		}
 
-		jack_set_process_callback(client, jack_process, (void*)this);
+		jack_set_process_callback(client, static_process, (void*)this);
 
 		jack_activate(client);
 	}
 
+	virtual ~jack_client() {
+		jack_deactivate(client);
+		jack_client_close(client);
+	}
+
 	int process(jack_nframes_t nframes) {
-		return 0;
+		return static_cast<client_type*>(this)->process(nframes);
+	}
+
+	static int static_process(jack_nframes_t nframes, void *arg) {
+		return ((jack_client<client_type>*)arg)->process(nframes);
 	}
 };
 
 } // namespace
 
-extern "C" {
-	int jack_process(jack_nframes_t nframes, void *arg) {
-		return ((seqpp::jack_client*)arg)->process(nframes);
-	}
-}
 
 #endif
 
