@@ -10,14 +10,15 @@ struct jack_client {
 	jack_client_t *client;
 
 	jack_client(const string name) {
-		client = jack_client_open(name.c_str());
+		jack_status_t jack_status;
+		client = jack_client_open(name.c_str(), JackNullOption, &jack_status);
 	}
 
 };
 
 extern "C" {
-	int process(jack_nframes_t, void *arg) {
-
+	int jack_process(jack_nframes_t, void *arg) {
+		return 0;
 	}
 }
 
