@@ -26,6 +26,7 @@ add_custom_command(
 add_custom_command(
 	COMMAND swig -c++ -debug-classes  -o ${PROJECT_BINARY_DIR}/seqpp_wrap.cc -lua ${PROJECT_SOURCE_DIR}/seqpp.i
 	OUTPUT ${PROJECT_BINARY_DIR}/seqpp_wrap.cc
+	DEPENDS jack_midi_consumer.h consumer.h heap.h disposable.h disposable_base.h
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/
 )
 

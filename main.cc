@@ -1,7 +1,7 @@
 #include <jack_midi_consumer.h>
 
 int main() {
-	seqpp::jack_midi_consumer c;
+	seqpp::jack_midi_consumer c("test");
 
 	seqpp::midi_event e;
 
