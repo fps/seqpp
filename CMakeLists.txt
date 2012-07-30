@@ -29,23 +29,30 @@ add_custom_command(
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/
 )
 
-add_definitions(-O3 -ffast-math -march=native -mtune=native -funsafe-math-optimizations -funroll-loops)
+#add_definitions(-O3 -ffast-math -march=native -mtune=native -funsafe-math-optimizations -funroll-loops)
 #add_definitions(-pg)
-set(CMAKE_EXE_LINKER_FLAGS -pg)
+
+#set(CMAKE_EXE_LINKER_FLAGS -pg)
 
 find_package(PkgConfig)
 
 find_package(Lua51)
 find_package(Boost COMPONENTS program_options)
 
+pkg_check_modules(SAMPLERATE samplerate)
+pkg_check_modules(SNDFILE sndfile)
+pkg_check_modules(JACK jack)
+
+include_directories(. ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
+link_directories(${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRARY_DIRS} ${JACK_LIBRARY_DIRS})
+
+
 add_executable(test_seqpp disposable.cc  heap.cc  main.cc  ${PROJECT_BINARY_DIR}/seqpp_wrap.cc)
 add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc disposable.cc  heap.cc) 
 
-include_directories(. ${LUA_INCLUDE_DIR})
+target_link_libraries(seqpp ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
+target_link_libraries(test_seqpp  ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
 
-pkg_check_modules(SEQPP samplerate sndfile jack)
-target_link_libraries(seqpp samplerate sndfile jack ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES})
-target_link_libraries(test_seqpp samplerate sndfile jack ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES})
 include_directories(${JASS_INCLUDE_DIRS})
 include_directories(${PROJECT_BINARY_DIR})
 

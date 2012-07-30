@@ -39,6 +39,7 @@ struct consumer {
 			usleep(10000);	
 		}
 		events.write(e);
+		return true;
 	}
 
 	bool post_event(const time_type t, const event_type e, bool is_blocking = false) {
