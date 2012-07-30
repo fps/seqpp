@@ -15,12 +15,14 @@ using std::runtime_error;
 
 namespace seqpp {
 
+extern "C" int jack_client_process(jack_nframes_t nframes, void *arg);
 
-template <class client_type>
 struct jack_client {
 	jack_client_t *client;
 
-	jack_client(const string name) {
+	jack_client(
+		const string name 
+	) {
 		jack_status_t jack_status;
 
 		client = jack_client_open(name.c_str(), JackNullOption, &jack_status);
@@ -29,7 +31,7 @@ struct jack_client {
 			throw runtime_error("failed to open jack client");
 		}
 
-		jack_set_process_callback(client, static_process, (void*)this);
+		jack_set_process_callback(client, seqpp::jack_client_process, (void*)this);
 
 		jack_activate(client);
 	}
@@ -39,14 +41,12 @@ struct jack_client {
 		jack_client_close(client);
 	}
 
-	int process(jack_nframes_t nframes) {
-		return static_cast<client_type*>(this)->process(nframes);
-	}
-
-	static int static_process(jack_nframes_t nframes, void *arg) {
-		return ((jack_client<client_type>*)arg)->process(nframes);
-	}
+	virtual int process(jack_nframes_t nframes) { return 0; }
 };
+
+extern "C" int jack_client_process(jack_nframes_t nframes, void *arg) {
+	return ((jack_client*)arg)->process(nframes);	
+}
 
 } // namespace
 

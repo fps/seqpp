@@ -26,7 +26,7 @@ add_custom_command(
 add_custom_command(
 	COMMAND swig -c++ -debug-classes  -o ${PROJECT_BINARY_DIR}/seqpp_wrap.cc -lua ${PROJECT_SOURCE_DIR}/seqpp.i
 	OUTPUT ${PROJECT_BINARY_DIR}/seqpp_wrap.cc
-	DEPENDS jack_midi_consumer.h consumer.h heap.h disposable.h disposable_base.h
+	DEPENDS jack_midi_consumer.h consumer.h seqpp.i
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/
 )
 
@@ -48,8 +48,8 @@ include_directories(. ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_IN
 link_directories(${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRARY_DIRS} ${JACK_LIBRARY_DIRS})
 
 
-add_executable(test_seqpp disposable.cc  heap.cc  main.cc)
-add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc disposable.cc  heap.cc) 
+add_executable(test_seqpp main.cc)
+add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc) 
 set_target_properties(seqpp PROPERTIES PREFIX "")
 
 target_link_libraries(seqpp ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})

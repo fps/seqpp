@@ -24,7 +24,7 @@ struct ringbuffer {
 
 	jack_ringbuffer_t *jack_ringbuffer;
 
-	ringbuffer(unsigned int size) : size(size) {
+	ringbuffer(unsigned int size = 1024) : size(size) {
 		jack_ringbuffer = jack_ringbuffer_create(sizeof(T) * size);
 
 		for (unsigned int i = 0; i < size; ++i) {
@@ -63,11 +63,18 @@ struct ringbuffer {
 		return false;
 	}
 
-	T& read() {
-		jack_ringbuffer_data_t rb_data[2];
-		jack_ringbuffer_get_read_vector(jack_ringbuffer, rb_data);
+	T* peek() {
+		if (false == can_read()) return 0;
+
+                jack_ringbuffer_data_t rb_data[2];
+                jack_ringbuffer_get_read_vector(jack_ringbuffer, rb_data);
+                return ((T*)rb_data->buf);
+	}
+
+	T read() {
+		T t = *peek();
 		jack_ringbuffer_read_advance(jack_ringbuffer, sizeof(T));
-		return *((T*)rb_data->buf);
+		return t;
 	}
 };
 

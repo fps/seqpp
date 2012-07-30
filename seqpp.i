@@ -9,11 +9,12 @@
 %}
 
 %apply unsigned long long { jack_nframes_t }
+
 %include "std_string.i"
 %include "std_pair.i"
 
 %include "midi_event.h"
-%include "consumer.h"
+%import "consumer.h"
 %template (jmc) seqpp::consumer<jack_nframes_t, midi_event>;
 %include "jack_midi_consumer.h"
  
