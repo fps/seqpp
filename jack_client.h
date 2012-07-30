@@ -4,6 +4,8 @@
 #include <jack/jack.h>
 #include <string>
 
+using std::string;
+
 struct jack_client {
 	jack_client_t *client;
 

@@ -4,21 +4,16 @@
 #include <consumer.h>
 #include <midi_event.h>
 #include <jack/jack.h>
+#include <jack_client.h>
 #include <string>
 
 using std::string;
 
 namespace seqpp {
 
-struct jack_midi_consumer : public  consumer<jack_nframes_t, midi_event> {
-	jack_client_t *jack_client;
+struct jack_midi_consumer : public  consumer<jack_nframes_t, midi_event>, public jack_client {
+	jack_midi_consumer(string name) : jack_client(name) {
 
-	jack_midi_consumer(string name) {
-
-	}
-
-	int process(jack_nframes_t nframes) {
-		return 0;
 	}
 };
 
