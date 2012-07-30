@@ -1,4 +1,4 @@
-%module libseqpp
+%module seqpp
 %{
         #include "midi_event.h"
         #include "consumer.h"

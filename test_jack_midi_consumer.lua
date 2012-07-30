@@ -1,8 +1,8 @@
-require "libseqpp"
+require "seqpp"
 
-jmc = libseqpp.jack_midi_consumer()
+jmc = seqpp.jack_midi_consumer("test")
 
-e = libseqpp.midi_event()
+e = seqpp.midi_event()
 
 jmc:post_event(0, e, false)
 
