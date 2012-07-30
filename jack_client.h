@@ -3,8 +3,10 @@
 
 #include <jack/jack.h>
 #include <string>
+#include <stdexcept>
 
 using std::string;
+using std::runtime_error;
 
 struct jack_client {
 	jack_client_t *client;
@@ -12,6 +14,9 @@ struct jack_client {
 	jack_client(const string name) {
 		jack_status_t jack_status;
 		client = jack_client_open(name.c_str(), JackNullOption, &jack_status);
+		if (0 == client) {
+			throw runtime_error("failed to open jack client");
+		}
 	}
 
 };

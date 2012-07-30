@@ -48,7 +48,7 @@ include_directories(. ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_IN
 link_directories(${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRARY_DIRS} ${JACK_LIBRARY_DIRS})
 
 
-add_executable(test_seqpp disposable.cc  heap.cc  main.cc  ${PROJECT_BINARY_DIR}/seqpp_wrap.cc)
+add_executable(test_seqpp disposable.cc  heap.cc  main.cc)
 add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc disposable.cc  heap.cc) 
 
 target_link_libraries(seqpp ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
