@@ -35,7 +35,7 @@ struct consumer {
 		If the event is not successfully posted,
 		return false.
 	*/
-	bool post_event(const disposable_event e, bool is_blocking = false) {
+	virtual bool post_event(const disposable_event e, bool is_blocking = false) {
 		if (false == is_blocking && false == events_in.can_write()) {
 			return false;
 		}
@@ -52,7 +52,7 @@ struct consumer {
 		return true;
 	}
 
-	bool post_event(const time_type t, const event_type e, bool is_blocking = false) {
+	virtual bool post_event(const time_type t, const event_type e, bool is_blocking = false) {
 		disposable_event ev(new pair<time_type, event_type>(t, e));
 		return post_event(ev, is_blocking);
 	}

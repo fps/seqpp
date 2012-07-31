@@ -15,9 +15,10 @@
 %include "std_pair.i"
 
 %include "midi_event.h"
-%import "consumer.h"
-%template (jmc) seqpp::consumer<jack_nframes_t, midi_event>;
+%include "consumer.h"
+%template (jc) seqpp::consumer<jack_nframes_t, seqpp::midi_event >;
 %include "jack_consumer.h"
+%template (jmc) seqpp::jack_consumer<seqpp::midi_event, seqpp::jack_midi_consumer >;
 %include "jack_midi_consumer.h"
  
 using namespace seqpp;
