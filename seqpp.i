@@ -2,6 +2,7 @@
 %{
         #include "midi_event.h"
         #include "consumer.h"
+        #include "jack_consumer.h"
         #include "jack_midi_consumer.h"
         #include <boost/shared_ptr.hpp>
 
@@ -16,6 +17,7 @@
 %include "midi_event.h"
 %import "consumer.h"
 %template (jmc) seqpp::consumer<jack_nframes_t, midi_event>;
+%include "jack_consumer.h"
 %include "jack_midi_consumer.h"
  
 using namespace seqpp;
