@@ -20,6 +20,8 @@ struct jack_consumer :
 {
 	//typename consumer<jack_nframes_t, jack_event>::disposable_event disposable_event;
 	typedef boost::shared_ptr<pair<jack_nframes_t, jack_event> > disposable_event;
+	typedef consumer<jack_nframes_t, jack_event> consumer_type;
+	//typedef consumer_type::disposable_event event_type;
 
 	jack_consumer(string name) : 
 		jack_client(name) 
@@ -33,12 +35,12 @@ struct jack_consumer :
 		jack_nframes_t frame_time = jack_last_frame_time(client);
 
 		for (jack_nframes_t frame = 0; frame < nframes; ++frame) {
-			if (events_in.can_read()) {
+			if (consumer_type::events_in.can_read()) {
 				// std::cout << "+" << std::endl;
 				disposable_event *ev;
-				while ((ev = events_in.peek()) != 0 && (*ev)->first <= (frame_time + frame) && events_in.can_read()) {
+				while ((ev = consumer_type::events_in.peek()) != 0 && (*ev)->first <= (frame_time + frame) && consumer_type::events_in.can_read()) {
 					std::cout << "-" << std::endl;
-					events_in.read();
+					consumer_type::events_in.read();
 				}
 			}
 		}
