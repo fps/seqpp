@@ -41,7 +41,7 @@ struct jack_client {
 		jack_client_close(client);
 	}
 
-	virtual int process(jack_nframes_t nframes) { return 0; }
+	virtual int process(jack_nframes_t nframes) { std::cout << "." << std::endl; return 0; }
 };
 
 extern "C" int jack_client_process(jack_nframes_t nframes, void *arg) {

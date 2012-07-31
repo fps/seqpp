@@ -50,7 +50,7 @@ link_directories(${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRAR
 
 add_executable(test_seqpp main.cc)
 add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc) 
-set_target_properties(seqpp PROPERTIES PREFIX "")
+set_target_properties(seqpp PROPERTIES PREFIX "" SUFFIX ".so")
 
 target_link_libraries(seqpp ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
 target_link_libraries(test_seqpp  ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
