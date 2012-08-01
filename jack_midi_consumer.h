@@ -26,7 +26,7 @@ struct jack_midi_consumer :
 	}
 
 	virtual void process_event(jack_consumer_type::disposable_event e) {
-		cout << "-" << endl;
+		cout << "|" << endl;
 	}
 
 	virtual jack_nframes_t time() {

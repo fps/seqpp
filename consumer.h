@@ -58,6 +58,14 @@ struct consumer {
 	}
 
 	virtual time_type time() = 0;
+
+	virtual void dispose_event(disposable_event e) {
+		if (false == events_out.can_write()) {
+			return;	
+		} 
+
+		events_out.write(e);
+	}
 };
 
 } // namespace

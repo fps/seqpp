@@ -38,7 +38,7 @@ add_custom_command(
 find_package(PkgConfig)
 
 find_package(Lua51)
-find_package(Boost COMPONENTS program_options)
+find_package(Boost COMPONENTS thread program_options REQUIRED)
 
 pkg_check_modules(SAMPLERATE samplerate)
 pkg_check_modules(SNDFILE sndfile)
@@ -52,11 +52,11 @@ add_executable(test_seqpp main.cc)
 add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc) 
 set_target_properties(seqpp PROPERTIES PREFIX "" SUFFIX ".so")
 
-target_link_libraries(seqpp ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
-target_link_libraries(test_seqpp  ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
+target_link_libraries(seqpp ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
+target_link_libraries(test_seqpp ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
 
 include_directories(${JASS_INCLUDE_DIRS})
 include_directories(${PROJECT_BINARY_DIR})
 
-install(TARGETS seqpp LIBRARY DESTINATION lib)
+install(TARGETS seqpp LIBRARY DESTINATION lib/lua/5.1/)
 
