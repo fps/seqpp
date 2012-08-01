@@ -40,7 +40,7 @@ pkg_check_modules(SAMPLERATE samplerate)
 pkg_check_modules(SNDFILE sndfile)
 pkg_check_modules(JACK jack)
 
-include_directories(. ${Boost_PROGRAM_OPTIONS_INCLUDE_DIRS} ${Boost_SYSTEM_INCLUDE_DIRS} ${Boost_THREAD_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
+include_directories(. ${PYTHON_INCLUDE_DIRS} ${Boost_PROGRAM_OPTIONS_INCLUDE_DIRS} ${Boost_SYSTEM_INCLUDE_DIRS} ${Boost_THREAD_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
 link_directories(${Boost_THREAD_LIBRARY_DIRS} ${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRARY_DIRS} ${JACK_LIBRARY_DIRS})
 
 add_library(lseqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_lua_wrap.cc) 
@@ -55,5 +55,6 @@ target_link_libraries(pseqpp ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${B
 include_directories(${JASS_INCLUDE_DIRS})
 include_directories(${PROJECT_BINARY_DIR})
 
-install(TARGETS lseqpp LIBRARY DESTINATION lib/lua/5.1/)
+install(TARGETS lseqpp LIBRARY DESTINATION lib/lua/5.1/ RENAME seqpp.so)
+install(TARGETS lseqpp LIBRARY DESTINATION lib/lua/5.1/ RENAME seqpp.so)
 
