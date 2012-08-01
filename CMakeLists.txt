@@ -30,6 +30,8 @@ add_custom_command(
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/
 )
 
+# add_definitions(-DBOOST_ALL_DYN_LINK)
+
 #add_definitions(-O3 -ffast-math -march=native -mtune=native -funsafe-math-optimizations -funroll-loops)
 #add_definitions(-pg)
 
@@ -38,22 +40,22 @@ add_custom_command(
 find_package(PkgConfig)
 
 find_package(Lua51)
-find_package(Boost COMPONENTS thread program_options REQUIRED)
+find_package(Boost COMPONENTS thread program_options system REQUIRED)
 
 pkg_check_modules(SAMPLERATE samplerate)
 pkg_check_modules(SNDFILE sndfile)
 pkg_check_modules(JACK jack)
 
-include_directories(. ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
-link_directories(${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRARY_DIRS} ${JACK_LIBRARY_DIRS})
+include_directories(. ${Boost_SYSTEM_INCLUDE_DIRS} ${Boost_THREAD_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
+link_directories(${Boost_THREAD_LIBRARY_DIRS} ${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRARY_DIRS} ${JACK_LIBRARY_DIRS})
 
 
 add_executable(test_seqpp main.cc)
 add_library(seqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_wrap.cc) 
 set_target_properties(seqpp PROPERTIES PREFIX "" SUFFIX ".so")
 
-target_link_libraries(seqpp ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
-target_link_libraries(test_seqpp ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
+target_link_libraries(seqpp ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
+target_link_libraries(test_seqpp ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${LUA_LIBRARIES} ${SAMPLERATE_LIBRARIES} ${SNDFILE_LIBRARIES} ${JACK_LIBRARIES})
 
 include_directories(${JASS_INCLUDE_DIRS})
 include_directories(${PROJECT_BINARY_DIR})
