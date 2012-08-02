@@ -1,9 +1,9 @@
 %module seqpp
 %{
-        #include "midi_event.h"
-        #include "consumer.h"
-        #include "jack_consumer.h"
-        #include "jack_midi_consumer.h"
+        #include "seqpp/midi_event.h"
+        #include "seqpp/consumer.h"
+        #include "seqpp/jack_consumer.h"
+        #include "seqpp/jack_midi_consumer.h"
         #include <boost/shared_ptr.hpp>
 
         using namespace seqpp;
@@ -14,12 +14,12 @@
 %include "std_string.i"
 %include "std_pair.i"
 
-%include "midi_event.h"
-%include "consumer.h"
+%include "seqpp/midi_event.h"
+%include "seqpp/consumer.h"
 %template (jc) seqpp::consumer<jack_nframes_t, seqpp::midi_event >;
-%include "jack_consumer.h"
+%include "seqpp/jack_consumer.h"
 %template (jmc) seqpp::jack_consumer<seqpp::midi_event, seqpp::jack_midi_consumer >;
-%include "jack_midi_consumer.h"
+%include "seqpp/jack_midi_consumer.h"
  
 using namespace seqpp;
 

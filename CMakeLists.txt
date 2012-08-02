@@ -10,17 +10,20 @@ add_custom_target(dist
         | bzip2 > ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/lua/)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/python/)
+
 add_custom_command(
-	COMMAND swig -c++ -debug-classes  -o ${PROJECT_BINARY_DIR}/seqpp_lua_wrap.cc -lua ${PROJECT_SOURCE_DIR}/seqpp.i
-	OUTPUT ${PROJECT_BINARY_DIR}/seqpp_lua_wrap.cc
-	DEPENDS jack_midi_consumer.h consumer.h seqpp.i
+	COMMAND swig -c++ -debug-classes  -o ${PROJECT_BINARY_DIR}/lua/seqpp_lua_wrap.cc -lua ${PROJECT_SOURCE_DIR}/seqpp.i
+	OUTPUT ${PROJECT_BINARY_DIR}/lua/seqpp_lua_wrap.cc
+	DEPENDS seqpp/jack_midi_consumer.h seqpp/consumer.h seqpp.i
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/
 )
 
 add_custom_command(
-	COMMAND swig -c++ -debug-classes  -o ${PROJECT_BINARY_DIR}/seqpp_python_wrap.cc -python ${PROJECT_SOURCE_DIR}/seqpp.i
-	OUTPUT ${PROJECT_BINARY_DIR}/seqpp_python_wrap.cc
-	DEPENDS jack_midi_consumer.h consumer.h seqpp.i
+	COMMAND swig -c++ -debug-classes  -o ${PROJECT_BINARY_DIR}/python/seqpp_python_wrap.cc -python ${PROJECT_SOURCE_DIR}/seqpp.i
+	OUTPUT ${PROJECT_BINARY_DIR}/python/seqpp_python_wrap.cc
+	DEPENDS seqpp/jack_midi_consumer.h seqpp/consumer.h seqpp.i
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/
 )
 
@@ -40,11 +43,11 @@ pkg_check_modules(SAMPLERATE samplerate)
 pkg_check_modules(SNDFILE sndfile)
 pkg_check_modules(JACK jack)
 
-include_directories(. ${PYTHON_INCLUDE_DIRS} ${Boost_PROGRAM_OPTIONS_INCLUDE_DIRS} ${Boost_SYSTEM_INCLUDE_DIRS} ${Boost_THREAD_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
+include_directories(. ${PROJECT_SOURCE_DIR}/seqpp ${PYTHON_INCLUDE_DIRS} ${Boost_PROGRAM_OPTIONS_INCLUDE_DIRS} ${Boost_SYSTEM_INCLUDE_DIRS} ${Boost_THREAD_INCLUDE_DIRS} ${LUA_INCLUDE_DIR} ${SAMPLERATE_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
 link_directories(${Boost_THREAD_LIBRARY_DIRS} ${LUA_LIBRARY_DIRS} ${SAMPLERATE_LIBRARY_DIRS} ${SNDFILE_LIBRARY_DIRS} ${JACK_LIBRARY_DIRS})
 
-add_library(lseqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_lua_wrap.cc) 
-add_library(pseqpp SHARED ${PROJECT_BINARY_DIR}/seqpp_python_wrap.cc) 
+add_library(lseqpp SHARED ${PROJECT_BINARY_DIR}/lua/seqpp_lua_wrap.cc) 
+add_library(pseqpp SHARED ${PROJECT_BINARY_DIR}/python/seqpp_python_wrap.cc) 
 
 set_target_properties(lseqpp PROPERTIES PREFIX "" SUFFIX ".so")
 set_target_properties(pseqpp PROPERTIES PREFIX "" SUFFIX ".so")
