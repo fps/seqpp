@@ -55,6 +55,6 @@ target_link_libraries(pseqpp ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${B
 include_directories(${JASS_INCLUDE_DIRS})
 include_directories(${PROJECT_BINARY_DIR})
 
-install(TARGETS lseqpp LIBRARY DESTINATION lib/lua/5.1/ RENAME seqpp.so)
-install(TARGETS lseqpp LIBRARY DESTINATION lib/lua/5.1/ RENAME seqpp.so)
+install(TARGETS lseqpp.so seqpp.so LIBRARY DESTINATION lib/lua/5.1/)
+install(TARGETS pseqpp.so seqpp.so LIBRARY DESTINATION lib/python2.7/site-packages)
 
