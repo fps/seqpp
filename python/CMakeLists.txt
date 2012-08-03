@@ -41,5 +41,5 @@ target_link_libraries(seqpp ${PYTHON_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_TH
 include_directories(${JASS_INCLUDE_DIRS})
 include_directories(${PROJECT_BINARY_DIR})
 
-install(TARGETS seqpp LIBRARY DESTINATION lib/lua/5.1/)
+install(TARGETS seqpp LIBRARY DESTINATION lib/python2.7/site-packages/)
 
