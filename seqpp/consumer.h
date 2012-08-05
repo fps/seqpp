@@ -63,6 +63,15 @@ struct consumer {
 
 	virtual time_type time() = 0;
 
+	/*
+		blocks until all events have been consumed
+	*/
+	void drain() {
+		while(false == events_in.empty()) {
+			usleep(1000);
+		}
+	}
+
 	protected:
 	gc<disposable_event> garbage;
 };

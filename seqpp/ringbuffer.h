@@ -3,6 +3,7 @@
 
 #include <jack/ringbuffer.h>
 #include <memory>
+#include <iostream>
 
 /**
 	T needs to be a default constructable type.. And it has to have valid
@@ -38,6 +39,11 @@ struct ringbuffer {
 		}
 
 		jack_ringbuffer_free(jack_ringbuffer);
+	}
+
+	bool empty() {
+		std::cout << "space: " << jack_ringbuffer_write_space(jack_ringbuffer) <<  " sizeof(T): " << sizeof(T) << " size: " << size << std::endl;
+		return jack_ringbuffer_write_space(jack_ringbuffer) == sizeof(T) * size;
 	}
 
 	bool can_write() {
