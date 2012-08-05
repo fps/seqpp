@@ -78,7 +78,6 @@ struct jack_client {
 
 	virtual ~jack_client() {
 		jack_deactivate(client);
-		jack_client_close(client);
 
 		for (unsigned int index = 0; index < midi_in_ports.size(); ++index) {
 			jack_port_unregister(client, midi_in_ports[index]);
@@ -95,6 +94,8 @@ struct jack_client {
 		for (unsigned int index = 0; index < audio_out_ports.size(); ++index) {
 			jack_port_unregister(client, audio_out_ports[index]);
 		}
+
+		jack_client_close(client);
 	}
 
 	int do_process(jack_nframes_t nframes) {
