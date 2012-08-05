@@ -42,4 +42,5 @@ include_directories(${JASS_INCLUDE_DIRS})
 include_directories(${PROJECT_BINARY_DIR})
 
 install(TARGETS seqpp LIBRARY DESTINATION lib/python2.7/site-packages/)
+install(FILES ${PROJECT_BINARY_DIR}/seqpp.py DESTINATION lib/python2.7/dist-packages/)
 

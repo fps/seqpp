@@ -19,7 +19,8 @@ struct jack_midi_consumer :
 	typedef consumer<jack_nframes_t, midi_event>::disposable_event disposable_event;
 	typedef jack_consumer<midi_event, jack_midi_consumer> jack_consumer_type;
 
-	jack_midi_consumer(string name) : 
+	jack_midi_consumer(string name) 
+		throw(runtime_error) : 
 		jack_consumer(name) 
 	{
 

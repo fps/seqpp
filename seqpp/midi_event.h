@@ -7,7 +7,7 @@ namespace seqpp {
 
 struct midi_event {
 	~midi_event() {
-		std::cout << "~midi_event()" << std::endl;
+		// std::cout << "~midi_event()" << std::endl;
 	}
 };
 

@@ -22,43 +22,30 @@ struct jack_consumer :
 	typedef boost::shared_ptr<pair<jack_nframes_t, event_type> > disposable_event;
 	typedef consumer<jack_nframes_t, event_type> consumer_type;
 
-	bool quit;
+	consumer_type::events_in;
 
-	void gc() {
-		while(false == quit) { 
-			while(consumer_type::events_out.can_read()) {
-				std::cout << "gc" << std::endl;
-				consumer_type::events_out.read();
-			}
-			usleep(10000);
-		}
-	}
-
-
-	jack_consumer(string name) : 
-		jack_client(name),
-		quit(false),
-		gc_thread(boost::bind(&jack_consumer<event_type, event_processor_type>::gc, this))
+	jack_consumer(string name) 
+		throw (runtime_error) : 
+		jack_client(name)
 	{
 
 	}
 
 	virtual ~jack_consumer() {
-		quit = true;
+
 	}
 	
 	virtual int process(jack_nframes_t nframes) {
 		jack_nframes_t frame_time = jack_last_frame_time(client);
 
 		for (jack_nframes_t frame = 0; frame < nframes; ++frame) {
-			if (consumer_type::events_in.can_read()) {
+			if (events_in.can_read()) {
 				// std::cout << "+" << std::endl;
 				disposable_event *ev;
-				while ((ev = consumer_type::events_in.peek()) != 0 && (*ev)->first <= (frame_time + frame) && consumer_type::events_in.can_read()) {
+				while ((ev = events_in.peek()) != 0 && (*ev)->first <= (frame_time + frame) && events_in.can_read()) {
 					std::cout << "-" << std::endl;
-					disposable_event e = consumer_type::events_in.read();
+					disposable_event e = events_in.read();
 					static_cast<event_processor_type*>(this)->process_event(e);
-					consumer_type::events_out.write(e);
 				}
 			}
 		}
@@ -69,9 +56,6 @@ struct jack_consumer :
 	virtual jack_nframes_t time() {
 		return jack_frame_time(client);
 	}
-
-	protected:
-	boost::thread gc_thread;
 };
 
 

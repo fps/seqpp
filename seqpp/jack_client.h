@@ -22,7 +22,9 @@ struct jack_client {
 
 	jack_client(
 		const string name 
-	) {
+	) 
+		throw (runtime_error) 
+	{
 		jack_status_t jack_status;
 
 		client = jack_client_open(name.c_str(), JackNullOption, &jack_status);
