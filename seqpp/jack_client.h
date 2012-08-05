@@ -2,6 +2,7 @@
 #define SEQPP_JACK_CLIENT_HH
 
 #include <jack/jack.h>
+#include <jack/midiport.h>
 #include <string>
 #include <stdexcept>
 #include <iostream>
@@ -47,22 +48,26 @@ struct jack_client {
 
 		for (unsigned int index = 0; index < midi_in_port_names.size(); ++index) {
 			cout << "registering port: " << midi_in_port_names[index] << std::endl;
-			jack_port_t *port = jack_port_register(client, midi_in_port_names[index].c_str(), JACK_DEFAULT_MIDI_TYPE, JackPortIsTerminal | JackPortIsOutput, 0);
+			jack_port_t *port = jack_port_register(client, midi_in_port_names[index].c_str(), JACK_DEFAULT_MIDI_TYPE, JackPortIsTerminal | JackPortIsInput, 0);
+			midi_in_ports.push_back(port);
 		}
 
 		for (unsigned int index = 0; index < midi_out_port_names.size(); ++index) {
 			cout << "registering port: " << midi_out_port_names[index] << std::endl;
 			jack_port_t *port = jack_port_register(client, midi_out_port_names[index].c_str(), JACK_DEFAULT_MIDI_TYPE, JackPortIsTerminal | JackPortIsOutput, 0);
+			midi_out_ports.push_back(port);
 		}
 
 		for (unsigned int index = 0; index < audio_in_port_names.size(); ++index) {
 			cout << "registering port: " << audio_in_port_names[index] << std::endl;
-			jack_port_t *port = jack_port_register(client, audio_in_port_names[index].c_str(), JACK_DEFAULT_MIDI_TYPE, JackPortIsTerminal | JackPortIsOutput, 0);
+			jack_port_t *port = jack_port_register(client, audio_in_port_names[index].c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsTerminal | JackPortIsInput, 0);
+			audio_in_ports.push_back(port);
 		}
 
 		for (unsigned int index = 0; index < audio_out_port_names.size(); ++index) {
 			cout << "registering port: " << audio_out_port_names[index] << std::endl;
-			jack_port_t *port = jack_port_register(client, audio_out_port_names[index].c_str(), JACK_DEFAULT_MIDI_TYPE, JackPortIsTerminal | JackPortIsOutput, 0);
+			jack_port_t *port = jack_port_register(client, audio_out_port_names[index].c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsTerminal | JackPortIsOutput, 0);
+			audio_out_ports.push_back(port);
 		}
 
 
@@ -92,11 +97,19 @@ struct jack_client {
 		}
 	}
 
+	int do_process(jack_nframes_t nframes) {
+		for (unsigned int index = 0; index < midi_out_ports.size(); ++index) {
+			jack_midi_clear_buffer(jack_port_get_buffer(midi_out_ports[index], nframes));
+		}
+
+		process(nframes);
+	}
+
 	virtual int process(jack_nframes_t nframes) = 0;
 };
 
 extern "C" int jack_client_process(jack_nframes_t nframes, void *arg) {
-	return ((jack_client*)arg)->process(nframes);	
+	return ((jack_client*)arg)->do_process(nframes);	
 }
 
 } // namespace

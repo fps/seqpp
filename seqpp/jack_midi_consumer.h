@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <jack/midiport.h>
 
 using std::string;
 using std::cout;
@@ -35,7 +36,8 @@ struct jack_midi_consumer :
 	}
 
 	virtual void process_event(jack_consumer_type::disposable_event e, jack_nframes_t nframes, jack_nframes_t frame) {
-		cout << "|" << endl;
+		cout << "event: " << (int)e->second.msg[0] << endl;
+		jack_midi_event_write(jack_port_get_buffer(midi_out_ports[0], nframes), frame, &(e->second.msg[0]), e->second.msg.size());
 	}
 
 	virtual jack_nframes_t time() {
