@@ -6,10 +6,12 @@
 #include <jack_consumer.h>
 #include <string>
 #include <iostream>
+#include <vector>
 
 using std::string;
 using std::cout;
 using std::endl;
+using std::vector;
 
 namespace seqpp {
 
@@ -21,12 +23,18 @@ struct jack_midi_consumer :
 
 	jack_midi_consumer(string name) 
 		throw(runtime_error) : 
-		jack_consumer(name) 
+		jack_consumer(
+			name, 
+			vector<string>(), 
+			vector<string>(1, "out"), 
+			vector<string>(), 
+			vector<string>()
+		) 
 	{
 
 	}
 
-	virtual void process_event(jack_consumer_type::disposable_event e) {
+	virtual void process_event(jack_consumer_type::disposable_event e, jack_nframes_t nframes, jack_nframes_t frame) {
 		cout << "|" << endl;
 	}
 

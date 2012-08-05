@@ -8,9 +8,11 @@
 #include <string>
 #include <iostream>
 #include <boost/thread.hpp>
+#include <vector>
 
 using std::string;
 using std::pair;
+using std::vector;
 
 namespace seqpp {
 
@@ -24,9 +26,9 @@ struct jack_consumer :
 
 	consumer_type::events_in;
 
-	jack_consumer(string name) 
+	jack_consumer(string name, vector<string> midi_in_port_names, vector<string> midi_out_port_names, vector<string> audio_in_port_names, vector<string> audio_out_port_names) 
 		throw (runtime_error) : 
-		jack_client(name)
+		jack_client(name, midi_in_port_names, midi_out_port_names, audio_in_port_names, audio_out_port_names)
 	{
 
 	}
@@ -45,7 +47,7 @@ struct jack_consumer :
 				while ((ev = events_in.peek()) != 0 && (*ev)->first <= (frame_time + frame) && events_in.can_read()) {
 					std::cout << "-" << std::endl;
 					disposable_event e = events_in.read();
-					static_cast<event_processor_type*>(this)->process_event(e);
+					static_cast<event_processor_type*>(this)->process_event(e, nframes, frame);
 				}
 			}
 		}
