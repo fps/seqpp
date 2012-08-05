@@ -106,6 +106,10 @@ struct jack_client {
 		process(nframes);
 	}
 
+	/*
+		override this method. note that for all midi output ports
+		jack_midi_clear_buffer has been called
+	*/
 	virtual int process(jack_nframes_t nframes) = 0;
 };
 
