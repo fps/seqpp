@@ -13,6 +13,7 @@
 
 %include "std_string.i"
 %include "std_pair.i"
+%include "std_vector.i"
 
 %include "seqpp/midi_event.h"
 %include "seqpp/consumer.h"

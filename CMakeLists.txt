@@ -15,11 +15,6 @@ add_custom_target(dist
 add_subdirectory(lua)
 add_subdirectory(python)
 
-#add_definitions(-O3 -ffast-math -march=native -mtune=native -funsafe-math-optimizations -funroll-loops)
-#add_definitions(-pg)
-
-#set(CMAKE_EXE_LINKER_FLAGS -pg)
-
 find_package(PkgConfig)
 find_package(Boost COMPONENTS thread program_options system REQUIRED)
 

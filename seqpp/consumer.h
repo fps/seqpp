@@ -5,9 +5,12 @@
 #include <utility>
 #include <unistd.h>
 #include <boost/shared_ptr.hpp>
+#include <list>
+#include <gc.h>
 
 using std::pair;
 using std::make_pair;
+using std::list;
 
 namespace seqpp {
 
@@ -16,11 +19,9 @@ struct consumer {
 	typedef boost::shared_ptr<pair<time_type, event_type> > disposable_event;
 
 	ringbuffer<disposable_event> events_in;
-	ringbuffer<disposable_event> events_out;
 
 	consumer() : 
-		events_in(1024), 
-		events_out(1024) 
+		events_in(1024)
 	{  }
 
 
@@ -48,6 +49,9 @@ struct consumer {
 		while (true == is_blocking && false == events_in.can_write()) {
 			usleep(10000);	
 		}
+
+		garbage.heap.push_back(e);
+
 		events_in.write(e);
 		return true;
 	}
@@ -59,13 +63,17 @@ struct consumer {
 
 	virtual time_type time() = 0;
 
-	virtual void dispose_event(disposable_event e) {
-		if (false == events_out.can_write()) {
-			return;	
-		} 
-
-		events_out.write(e);
+	/*
+		blocks until all events have been consumed
+	*/
+	void drain() {
+		while(false == events_in.empty()) {
+			usleep(1000);
+		}
 	}
+
+	protected:
+	gc<disposable_event> garbage;
 };
 
 } // namespace
