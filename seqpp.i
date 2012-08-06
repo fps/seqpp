@@ -16,6 +16,7 @@
 %include "std_vector.i"
 
 %include "seqpp/midi_event.h"
+%template (bytes) std::vector<unsigned int>;
 %include "seqpp/consumer.h"
 %template (jc) seqpp::consumer<jack_nframes_t, seqpp::midi_event >;
 %include "seqpp/jack_consumer.h"

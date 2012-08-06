@@ -2,6 +2,8 @@ require "seqpp"
 
 jmc = seqpp.jack_midi_consumer("test")
 
+event = seqpp.midi_event(seqpp.bytes({1, 2, 3, 4, 5}))
+
 time = jmc:time()
 
 for i = 1, 50 do
